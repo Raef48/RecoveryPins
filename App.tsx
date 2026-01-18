@@ -41,7 +41,8 @@ const App: React.FC = () => {
   });
 
   const [hintLoading, setHintLoading] = useState(false);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  // Randomize initial track index
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(() => Math.floor(Math.random() * PLAYLIST.length));
   const [trackNotification, setTrackNotification] = useState<string | null>(null);
   const [audioStarted, setAudioStarted] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -52,7 +53,6 @@ const App: React.FC = () => {
   const [failVideo, setFailVideo] = useState("");
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  // Fix: Use number instead of NodeJS.Timeout for browser-side timer reference
   const timerRef = useRef<number | null>(null);
 
   const addLog = (msg: string) => {
@@ -86,7 +86,6 @@ const App: React.FC = () => {
   // Timer Logic
   useEffect(() => {
     if (state.gameStarted && !state.victory && !showFailure) {
-      // Fix: Use window.setInterval to ensure numeric return type in browser environment
       timerRef.current = window.setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
@@ -105,14 +104,18 @@ const App: React.FC = () => {
   }, [state.gameStarted, state.victory, showFailure]);
 
   const handleAudioEnded = () => {
-    setCurrentTrackIndex((prev) => (prev + 1) % PLAYLIST.length);
+    // Pick a random next track that is different from the current one
+    let nextIndex;
+    do {
+      nextIndex = Math.floor(Math.random() * PLAYLIST.length);
+    } while (nextIndex === currentTrackIndex && PLAYLIST.length > 1);
+    setCurrentTrackIndex(nextIndex);
   };
 
   const handleFailure = (reason: string) => {
     addLog(reason);
     setFailVideo(FAIL_VIDEOS[Math.floor(Math.random() * FAIL_VIDEOS.length)]);
     setShowFailure(true);
-    // Auto reset after failure video is likely finished or some time passes
     setTimeout(() => {
       setShowFailure(false);
       setState(s => ({ ...s, gameStarted: false }));
@@ -122,7 +125,6 @@ const App: React.FC = () => {
   const startNewGame = (diff: Difficulty) => {
     const { target, pins, operators } = generateRound(diff);
     
-    // Set time limits: Easy 3m, Medium 6m, Hard 8m
     let initialTime = 180;
     if (diff === Difficulty.MEDIUM) initialTime = 360;
     if (diff === Difficulty.HARD) initialTime = 480;
@@ -219,7 +221,6 @@ const App: React.FC = () => {
         className="hidden"
       />
 
-      {/* Failure Overlay */}
       {showFailure && (
         <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center animate-in fade-in duration-1000">
             <video 
@@ -311,10 +312,9 @@ const App: React.FC = () => {
 
           {showSettings && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
-              <div className="glass-panel max-w-sm w-full p-8 rounded-2xl border-emerald-500/50 shadow-2xl overflow-y-auto max-h-[90vh]">
+              <div className="glass-panel max-sm w-full p-8 rounded-2xl border-emerald-500/50 shadow-2xl overflow-y-auto max-h-[90vh]">
                 <h2 className="text-xl font-bold text-emerald-400 uppercase tracking-widest mb-6 border-b border-emerald-500/20 pb-2">Terminal Settings</h2>
                 
-                {/* Rules Section */}
                 <div className="mb-8 space-y-4">
                   <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-[0.2em] flex items-center gap-2">
                     <span className="text-lg">🎯</span> Rules
