@@ -311,9 +311,35 @@ const App: React.FC = () => {
 
           {showSettings && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
-              <div className="glass-panel max-w-xs w-full p-8 rounded-2xl border-emerald-500/50 shadow-2xl">
+              <div className="glass-panel max-w-sm w-full p-8 rounded-2xl border-emerald-500/50 shadow-2xl overflow-y-auto max-h-[90vh]">
                 <h2 className="text-xl font-bold text-emerald-400 uppercase tracking-widest mb-6 border-b border-emerald-500/20 pb-2">Terminal Settings</h2>
-                <div className="flex items-center justify-between mb-8">
+                
+                {/* Rules Section */}
+                <div className="mb-8 space-y-4">
+                  <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                    <span className="text-lg">🎯</span> Rules
+                  </h3>
+                  <ul className="space-y-3">
+                    <li className="flex gap-3 text-sm font-mono text-emerald-300/80">
+                      <span className="text-cyan-500">▶</span>
+                      <span>Target value range: <b className="text-white">24 – 100</b></span>
+                    </li>
+                    <li className="flex gap-3 text-sm font-mono text-emerald-300/80">
+                      <span className="text-cyan-500">▶</span>
+                      <span>Operators are hidden — <b className="text-white">only deduction works</b></span>
+                    </li>
+                    <li className="flex gap-3 text-sm font-mono text-emerald-300/80">
+                      <span className="text-cyan-500">▶</span>
+                      <span>Limited attempts before <b className="text-white">security lockout</b></span>
+                    </li>
+                    <li className="flex gap-3 text-sm font-mono text-emerald-300/80">
+                      <span className="text-cyan-500">▶</span>
+                      <span>Time pressure based on <b className="text-white">difficulty</b></span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="flex items-center justify-between mb-8 border-t border-emerald-500/20 pt-6">
                   <span className="text-emerald-300 font-mono text-sm uppercase">Music Output</span>
                   <button 
                     onClick={() => setIsMuted(!isMuted)}
@@ -322,9 +348,10 @@ const App: React.FC = () => {
                     {isMuted ? 'Muted' : 'Active'}
                   </button>
                 </div>
+
                 <button 
                   onClick={() => setShowSettings(false)}
-                  className="w-full py-3 bg-emerald-500 text-slate-900 font-bold uppercase tracking-widest hover:bg-emerald-400 transition-colors rounded-lg"
+                  className="w-full py-3 bg-emerald-500 text-slate-900 font-bold uppercase tracking-widest hover:bg-emerald-400 transition-colors rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)]"
                 >
                   Save & Return
                 </button>
