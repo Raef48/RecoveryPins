@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="8" fill="#020617"/>
+  <!-- Glowing Outer Ring -->
+  <circle cx="16" cy="11.5" r="7.5" stroke="#10b981" stroke-opacity="0.3" stroke-width="1"/>
+  <!-- Main Pin Shape -->
+  <path d="M16 26S24 16.8364 24 11.5C24 7.35786 20.4183 4 16 4C11.5817 4 8 7.35786 8 11.5C8 16.8364 16 26 16 26Z" fill="#10b981"/>
+  <!-- Inner Node Hole -->
+  <circle cx="16" cy="11" r="2.5" fill="#020617"/>
+  <!-- Tech Accents -->
+  <rect x="14" y="27" width="4" height="1" fill="#10b981" fill-opacity="0.5"/>
+</svg>
